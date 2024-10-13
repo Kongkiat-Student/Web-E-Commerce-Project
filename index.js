@@ -25,7 +25,7 @@ var product = [{
     name: 'ครีมกันแดด',
     price: 699,
     description:'ครีมกันแดด ช่วยป้องกันการถูกแดดเผาลดมะเร็งผิวหนัง ช่วยให้ร่างกายป้องกันตัวเองจากภัยคุกคามอื่นๆ สามารถลดริ้วรอยก่อนวัยได้ช่วยลดอาการกำเริบของโฟโตเดอร์โมเสส',
-    type: 'Fashion',
+    type: 'Beauty & Cosmetics',
   },{
     id: 5,
     img: 'https://s3-ap-southeast-1.amazonaws.com/pcms.production.mcshop/catalog/product/_/_/______mccz020_m_3_.jpg',
@@ -34,9 +34,34 @@ var product = [{
     description:'กางเกง ใส่สบายหล่อเท่ตามแฟชั่นปัจจุบัน',
     type: 'Fashion',
 }];
-// [{},{},{}] // length = 3
+//[{},{},{}] // length = 3
+
+// var product;
 
 $(document).ready(() => {
+
+  // $.ajax({
+  //   method: 'get',
+  //   url: './api/getallproduct.php',
+  //   success: function(response){
+  //     console.log(response)
+  //     if(response.RespCode == 200){
+  //       product = response.Result;
+  //       var html = "";
+  //       for (let i = 0; i < product.length; i++) {
+  //         html += `<div onclick="openProductDetail(${i})" class="product-items ${product[i].type}">
+  //                   <img class="product-img" src="./Image/${product[i].img}" alt="">
+  //                   <p style="font-size: 1.2vw;">${product[i].name}</p>
+  //                   <p stlye="font-size: 1vw;">${numberWithCommas(product[i].price)}THB</p>
+  //               </div>`;
+  //         }
+  //         $("#productlist").html(html);
+  //     }
+  //   },error: function(err){
+  //     console.log(err)
+  //   }   
+  // })
+
   var html = "";
   for (let i = 0; i < product.length; i++) {
     html += `<div onclick="openProductDetail(${i})" class="product-items ${
@@ -62,12 +87,12 @@ function searchsomething(elem) {
   // console.log('#'+elem.id)
   var value = $("#" + elem.id).val();
   console.log(value);
-
+  // <img class="product-img" src="./Image/${product[i].img}" alt=""></img>
   var html = "";
   for (let i = 0; i < product.length; i++) {
     if (product[i].name.includes(value)) {
       html += `<div onclick="openProductDetail(${i})" class="product-items ${product[i].type}">
-              <img class="product-img" src="${product[i].img}" alt="">
+              <img class="product-img" src="${product[i].img}" alt=""> 
               <p style="font-size: 1.2vw;">${product[i].name}</p>
               <p stlye="font-size: 1vw;">${numberWithCommas(product[i].price)} THB</p>
           </div>`;
@@ -97,6 +122,7 @@ function openProductDetail(index) {
   console.log(productindex);
   $("#modalDesc").css("display", "flex");
   $("#mdd-img").attr("src", product[index].img);
+  // $("#mdd-img").attr("src",'./Image/'+ product[index].img);
   $("#mdd-name").text(product[index].name);
   $("#mdd-price").text(numberWithCommas(product[index].price) + " THB");
   $("#mdd-desc").text(product[index].description);
@@ -144,6 +170,7 @@ function openCart() {
   rendercart();
 }
 
+// {/* <img src="./Image/${cart[i].img}" alt=""></img> */}
 function rendercart() {
   if (cart.length > 0) {
     var html = "";
@@ -212,3 +239,7 @@ function deinitems(action, index) {
     rendercart();
   }
 }
+
+// function buynow() {
+
+// }
