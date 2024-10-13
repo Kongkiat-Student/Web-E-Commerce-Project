@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="index.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
@@ -20,10 +21,10 @@
     
           <div class="nav-profile">
             <p class="nav-profile-name">Shop</p>
-            <div class="nav-profile-cart">
+            <div onclick="openCart()" style="cursor: pointer;" class="nav-profile-cart">
               <i class="fas fa-cart-shopping"></i>
-              <div class="cartcount">
-                5
+              <div id="cartcount" class="cartcount" style="display: none;">
+                  0
               </div>
             </div>
           </div>
@@ -32,7 +33,7 @@
     
       <div class="container">
         <div class="sidebar">
-          <input type="text" class="sidebar-search" placeholder="Search something...">
+          <input type="text" id="txt_search" onkeyup="searchsomething(this)" class="sidebar-search" placeholder="ค้นหา">
           <a href="page1.html" class="sidebar-items">
             เครื่องสําอางและครีม
           </a>
@@ -43,59 +44,30 @@
             แฟชั่น
           </a>
         </div>
-        <!-- Java Script By Earth -->
-         <div id = "productlist" class = "product" >
+        <a div id="productlist" class="product" >
 
-
-
-
-         </div>
-        <!-- <div class="product">
-          <div class="product-items">
-            <a href="page1.html"><img class="product-img"  src="Image/31381276_10155203640836020_1491318365791191040_n.jpg" alt=""></a>
-            <p style ="font-size: 1.5vw;">เครื่องสําอางและครีม </p> 
-          </div> -->
-          <!-- <div class="product-items">
-            <a href="page1.html"><img class="product-img" src="./Image/2.jpg" alt=""></a>
-            <p style="font-size: 1.5vw;">เครื่องสําอางและครีม</p>
-            
-          </div>
-          <div class="product-items">
-            <a href="page2.html"><img class="product-img" src="./Image/อาหารเสริม.jpg" alt=""></a>
-            <p style="font-size: 1.5vw;">อาหารเสริม</p>
-            
-          </div>
-          <div class="product-items">
-            <a href="page2.html"><img class="product-img" src="./Image/ผลิตภัณฑ์อาหารเสริม-คืออะไร.jpg" alt=""></a>
-            <p style="font-size: 1.5vw;">อาหารเสริม</p>
-            
-          </div>
-          <div class="product-items">
-            <a href="page3.html"><img class="product-img" src="./Image/O1CN01ELmNZa1Q7WaT47QJN__490011929.jpg" alt=""></a>
-            <p style="font-size: 1.5vw;">แฟชั่น</p>
-            
-          </div> -->
         </div>
       </div>
+        
     
-      <div class="modal" style="display: none;">
-        <div class="modal-bg"></div>
+      <div id="modalDesc" class="modal" style="display: none;">
+        <div onclick="closeModal()" class="modal-bg"></div>
         <div class="modal-page">
           <h2>Detail</h2>
           <br>
           <div class="modaldesc-content">
-            <img class="modaldesc-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
+            <img id="mdd-img" class="modaldesc-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
             <div class="modaldesc-detail">
-              <p style="font-size: 1.5vw;">Product name</p>
-              <p style="font-size: 1.2vw;">500 THB</p>
+              <p id="mdd-name" style="font-size: 1.5vw;">Product name</p>
+              <p id="mdd-price" style="font-size: 1.2vw;">500 THB</p>
               <br>
-              <p style="color: #adadad;">Lorem iaudantium harum doloremque alias. Quae, vel ipsum quasi, voluptas, sit optio nemo magni numquam non dicta voluptates porro! Vero eveniet numquam sit aut vel eligendi officiis iste tenetur expedita. Delectus vero quibusdam adipisci in. Esse.</p>
+              <p id="mdd-desc" style="color: #adadad;">Lorem iaudantium harum doloremque alias. Quae, vel ipsum quasi, voluptas, sit optio nemo magni numquam non dicta voluptates porro! Vero eveniet numquam sit aut vel eligendi officiis iste tenetur expedita. Delectus vero quibusdam adipisci in. Esse.</p>
               <br>
               <div class="btn-control">
-                <button class="btn">
+                <button onclick="closeModal()" class="btn">
                   Close
                 </button>
-                <button class="btn btn-buy">
+                <button onclick="addtocart()" class="btn btn-buy">
                   Add to cart
                 </button>
               </div>
@@ -104,100 +76,17 @@
         </div>
       </div>
     
-      <div class="modal" style="display: none;">
-        <div class="modal-bg"></div>
+      <div id="modalCart" class="modal" style="display: none;">
+        <div onclick="closeModal()" class="modal-bg"></div>
         <div class="modal-page">
           <h2>My cart</h2>
           <br>
-          <div class="cartlist">
-            <div class="cartlist-items">
-              <div class="cartlist-left">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
-                <div class="cartlist-detail">
-                  <p style="font-size: 1.5vw;">Product name</p>
-                  <p style="font-size: 1.2vw;">500 THB</p>
-                </div>
-              </div>
-              <div class="cartlist-right">
-                <p class="btnc">-</p>
-                <p style="margin: 0 20px;">1</p>
-                <p class="btnc">+</p>
-              </div>
-            </div>
-            <div class="cartlist-items">
-              <div class="cartlist-left">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
-                <div class="cartlist-detail">
-                  <p style="font-size: 1.5vw;">Product name</p>
-                  <p style="font-size: 1.2vw;">500 THB</p>
-                </div>
-              </div>
-              <div class="cartlist-right">
-                <p class="btnc">-</p>
-                <p style="margin: 0 20px;">1</p>
-                <p class="btnc">+</p>
-              </div>
-            </div>
-            <div class="cartlist-items">
-              <div class="cartlist-left">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
-                <div class="cartlist-detail">
-                  <p style="font-size: 1.5vw;">Product name</p>
-                  <p style="font-size: 1.2vw;">500 THB</p>
-                </div>
-              </div>
-              <div class="cartlist-right">
-                <p class="btnc">-</p>
-                <p style="margin: 0 20px;">1</p>
-                <p class="btnc">+</p>
-              </div>
-            </div>
-            <div class="cartlist-items">
-              <div class="cartlist-left">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
-                <div class="cartlist-detail">
-                  <p style="font-size: 1.5vw;">Product name</p>
-                  <p style="font-size: 1.2vw;">500 THB</p>
-                </div>
-              </div>
-              <div class="cartlist-right">
-                <p class="btnc">-</p>
-                <p style="margin: 0 20px;">1</p>
-                <p class="btnc">+</p>
-              </div>
-            </div>
-            <div class="cartlist-items">
-              <div class="cartlist-left">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
-                <div class="cartlist-detail">
-                  <p style="font-size: 1.5vw;">Product name</p>
-                  <p style="font-size: 1.2vw;">500 THB</p>
-                </div>
-              </div>
-              <div class="cartlist-right">
-                <p class="btnc">-</p>
-                <p style="margin: 0 20px;">1</p>
-                <p class="btnc">+</p>
-              </div>
-            </div>
-            <div class="cartlist-items">
-              <div class="cartlist-left">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="">
-                <div class="cartlist-detail">
-                  <p style="font-size: 1.5vw;">Product name</p>
-                  <p style="font-size: 1.2vw;">500 THB</p>
-                </div>
-              </div>
-              <div class="cartlist-right">
-                <p class="btnc">-</p>
-                <p style="margin: 0 20px;">1</p>
-                <p class="btnc">+</p>
-              </div>
-            </div>
+          <div id="mycart" class="cartlist">
+            
     
           </div>
           <div class="btn-control">
-            <button class="btn">
+            <button onclick="closeModal()" class="btn">
               Cancel
             </button>
             <button class="btn btn-buy">

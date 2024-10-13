@@ -1,106 +1,46 @@
-// var product = [{
-//     id: 1,
-//     img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98w-lr130fo4pj724d',
-//     name: 'Oil Vitamin',
-//     price: 1250,
-//     description: 'Oil Vitamin Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla',
-//     type: 'Beauty & Cosmetics'
-// }, {
-//     id: 2,
-//     img: 'https://www.premacare.co.th/assets/file/product/homepage/202301/271220-ft-fmp67profile.png',
-//     name: 'Simlox',
-//     price: 5009,
-//     description: 'Simlox Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla',
-//     type: 'food supplement'
-// },{
-//     id: 3,
-//     img: 'https://image.makewebeasy.net/makeweb/m_1200x600/Abg0fNlWE/Article/O1CN01ELmNZa1Q7WaT47QJN__490011929.jpg',
-//     name: 'Fashion',
-//     price: 1998,
-//     description: 'Fashion Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla',
-//     type: 'Fashion'
-// }];
-
-// $(document).ready(() => {
-//     var html = '';
-//     for (let i = 0; i < product.length; i++) {
-//         html += `<div class="product-items" ${product[i].type}>
-//                     <img class="product-img"  src="${product[i].img}" alt="">
-//                     <p style ="font-size: 1.5vw;">${product[i].name}</p>
-//                     <p style ="font-size: 1vw;">${numberWithCommas(product[i].price)}</p>
-//                 </div>`;
-//     }
-//     $("#productlist").html(html)
-
-// })
-
-// function numberWithCommas(x) {
-//     x = x.toString();
-//     var pattern = /(-?\d+)(\d{3})/;
-//     while (pattern.test(x))
-//         x = x.replace(pattern, "$1,$2");
-// }
-
-// var product = [{
-//     id: 1,
-//     img: '',
-//     name: '',
-//     price: 700 ,
-//     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, blanditiis sit. Accusantium maxime eum rerum.',
-//     type: 'เครื่องสำอางและครีม'
-// } , {} , {}];
-
-var product = [
-  {
+var product = [{
     id: 1,
-    img: "https://down-th.img.susercontent.com/file/th-11134207-7r98w-lr130fo4pj724d",
-    name: "Oil Vitamin",
-    price: 1250,
-    description:
-      "Oil Vitamin Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla",
-    type: "Beauty & Cosmetics",
-  },
-  {
+    img: 'https://down-th.img.susercontent.com/file/th-11134207-7r98w-lr130fo4pj724d',
+    name: 'ทีทรีออยล์วิตามินซี',
+    price: 499,
+    description:'Oil Vitamin Lorem, ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla',
+    type: 'Beauty & Cosmetics',
+},{
     id: 2,
-    img: "https://www.premacare.co.th/assets/file/product/homepage/202301/271220-ft-fmp67profile.png",
-    name: "Simlox",
-    price: 5009,
-    description:
-      "Simlox Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla",
-    type: "food supplement",
-  },
-  {
+    img: 'https://www.premacare.co.th/assets/file/product/homepage/202301/271220-ft-fmp67profile.png',
+    name: 'ซิมล็อกซ์',
+    price: 599,
+    description:'Simlox Lorem, ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla',
+    type: 'food supplement',
+},{
     id: 3,
-    img: "https://image.makewebeasy.net/makeweb/m_1200x600/Abg0fNlWE/Article/O1CN01ELmNZa1Q7WaT47QJN__490011929.jpg",
-    name: "Fashion",
-    price: 1990,
-    description:
-      "Fashion Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla",
-    type: "Fashion",
-  },
-];
+    img: 'https://image.makewebeasy.net/makeweb/m_1200x600/Abg0fNlWE/Article/O1CN01ELmNZa1Q7WaT47QJN__490011929.jpg',
+    name: 'เสื้อแฟชั่น',
+    price: 1200,
+    description:'Tshirt Lorem, ipsum dolor, sit amet consectetur adipisicing elit. Ut facere esse quam voluptates ab velit adipisci? Minima voluptatem perspiciatis ex vitae, alias aspernatur error ipsam culpa. Accusantium quia culpa nulla',
+    type: 'Fashion',
+}];
 // [{},{},{}] // length = 3
 
 $(document).ready(() => {
   var html = "";
   for (let i = 0; i < product.length; i++) {
     html += `<div onclick="openProductDetail(${i})" class="product-items ${
-      product[i].type
-    }">
+      product[i].type}">
                     <img class="product-img" src="${product[i].img}" alt="">
                     <p style="font-size: 1.2vw;">${product[i].name}</p>
-                    <p stlye="font-size: 1vw;">${numberWithCommas(
-                      product[i].price
-                    )} THB</p>
+                    <p stlye="font-size: 1vw;">${numberWithCommas(product[i].price)}THB</p>
                 </div>`;
   }
   $("#productlist").html(html);
+
 });
 
 function numberWithCommas(x) {
   x = x.toString();
   var pattern = /(-?\d+)(\d{3})/;
-  while (pattern.test(x)) x = x.replace(pattern, "$1,$2");
+  while (pattern.test(x)) 
+    x = x.replace(pattern, "$1,$2");
   return x;
 }
 
@@ -112,16 +52,12 @@ function searchsomething(elem) {
   var html = "";
   for (let i = 0; i < product.length; i++) {
     if (product[i].name.includes(value)) {
-      html += `<div onclick="openProductDetail(${i})" class="product-items ${
-        product[i].type
-      }">
-                    <img class="product-img" src="${product[i].img}" alt="">
-                    <p style="font-size: 1.2vw;">${product[i].name}</p>
-                    <p stlye="font-size: 1vw;">${numberWithCommas(
-                      product[i].price
-                    )} THB</p>
-                </div>`;
-    }
+      html += `<div onclick="openProductDetail(${i})" class="product-items ${product[i].type}">
+              <img class="product-img" src="${product[i].img}" alt="">
+              <p style="font-size: 1.2vw;">${product[i].name}</p>
+              <p stlye="font-size: 1vw;">${numberWithCommas(product[i].price)} THB</p>
+          </div>`;
+      }
   }
   if (html == "") {
     $("#productlist").html(`<p>Not found product</p>`);
@@ -129,6 +65,7 @@ function searchsomething(elem) {
     $("#productlist").html(html);
   }
 }
+
 
 function searchproduct(param) {
   console.log(param);
