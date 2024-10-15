@@ -88,7 +88,7 @@
         }
 
         function confirmOrder() {
-    // ดึงข้อมูลการจัดส่งและวิธีการชำระเงิน
+    // ดึงข้อมูลการจัดส่ง
     let fullName = document.getElementById('full-name').value;
     let address = document.getElementById('shipping-address').value;
     let city = document.getElementById('city').value;
@@ -99,28 +99,73 @@
 
     // ตรวจสอบว่าฟิลด์ข้อมูลการจัดส่งมีการกรอกข้อมูลครบถ้วนหรือไม่
     if (fullName === '' || address === '' || city === '' || postalCode === '' || country === '' || phoneNumber === '') {
-        alert('Please fill out all shipping information.');
+        Swal.fire('กรุณากรอกข้อมูลการจัดส่งทั้งหมด', '', 'warning');
         return;
     }
 
-    // สร้างการแจ้งเตือนให้ผู้ใช้ยืนยันการชำระเงิน
-    Swal.fire({
-        title: 'Confirm your order',
-        text: `Shipping to: ${fullName}\nAddress: ${address}, ${city}, ${postalCode}, ${country}\nPhone: ${phoneNumber}\nPayment method: ${paymentMethod}`,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // สั่งซื้อสำเร็จ
-            Swal.fire('Order Confirmed!', 'Your order has been placed successfully.', 'success');
-            // ทำการรีเซ็ตตะกร้าสินค้าและพาผู้ใช้กลับไปหน้าแรก
-            localStorage.removeItem('cart');
-            window.location.href = 'index.html';
+    // ดึงข้อมูลตะกร้าสินค้า
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // ดึงข้อมูลผลิตภัณฑ์ล่าสุดจากฐานข้อมูล
+    $.ajax({
+        method: 'get',
+        url: './api/getallproduct.php',
+        success: function(response) {
+            if(response.RespCode == 200) {
+                const latestProducts = response.Result;
+
+                // ตรวจสอบราคาของสินค้าที่อยู่ในตะกร้า
+                let priceMismatch = false;
+                let priceDetails = '';
+
+                cart.forEach(item => {
+                    const latestProduct = latestProducts.find(product => product.id == item.id);
+                    if (latestProduct && latestProduct.price !== item.price) {
+                        priceMismatch = true;
+                        priceDetails += `${item.name}: ราคาตะกร้า: ${numberWithCommas(item.price)} THB, ราคาล่าสุด: ${numberWithCommas(latestProduct.price)} THB<br>`;
+                    }
+                });
+
+                if (priceMismatch) {
+                    Swal.fire({
+                        title: 'ราคาสินค้าเปลี่ยนแปลง',
+                        html: `สินค้าที่มีการเปลี่ยนแปลงราคา:<br>${priceDetails}<br>คุณต้องการดำเนินการต่อด้วยราคาปัจจุบันหรือไม่?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'ใช่',
+                        cancelButtonText: 'ไม่ใช่'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            placeOrder(fullName, address, city, postalCode, country, phoneNumber, paymentMethod);
+                        }
+                    });
+                } else {
+                    placeOrder(fullName, address, city, postalCode, country, phoneNumber, paymentMethod); // ไม่มีการเปลี่ยนแปลงราคา ดำเนินการสั่งซื้อ
+                }
+            }
+        },
+        error: function(err) {
+            console.log(err);
         }
     });
 }
+
+function placeOrder(fullName, address, city, postalCode, country, phoneNumber, paymentMethod) {
+    Swal.fire({
+        title: 'ยืนยันคำสั่งซื้อของคุณ',
+        text: `จัดส่งไปที่: ${fullName}\nที่อยู่: ${address}, ${city}, ${postalCode}, ${country}\nโทรศัพท์: ${phoneNumber}\nวิธีการชำระเงิน: ${paymentMethod}`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยัน',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('ยืนยันคำสั่งซื้อแล้ว!', 'คำสั่งซื้อของคุณถูกวางเรียบร้อยแล้ว', 'success');
+            localStorage.removeItem('cart'); // เคลียร์ตะกร้า
+            window.location.href = 'index.html'; // เปลี่ยนหน้าไปยังหน้าหลัก
+        }
+    });
+}ผ
 
 
         // ฟังก์ชันแสดงสรุปรายการสั่งซื้อจากข้อมูลใน localStorage
@@ -143,6 +188,81 @@
             loadOrderSummary();
         });
         
+        function confirmOrder() {
+    // ดึงข้อมูลผลิตภัณฑ์ล่าสุด
+    $.ajax({
+        method: 'get',
+        url: './api/getallproduct.php',
+        success: function(response) {
+            if(response.RespCode == 200) {
+                const latestProducts = response.Result;
+
+                // ตรวจสอบราคาของสินค้าที่อยู่ในตะกร้า
+                let priceMismatch = false;
+                let priceDetails = '';
+
+                cart.forEach(item => {
+                    const latestProduct = latestProducts.find(product => product.id === item.id);
+                    if (latestProduct && latestProduct.price !== item.price) {
+                        priceMismatch = true;
+                        priceDetails += `${item.name}: ราคาตะกร้า: ${numberWithCommas(item.price)} THB, ราคาล่าสุด: ${numberWithCommas(latestProduct.price)} THB<br>`;
+                    }
+                });
+
+                if (priceMismatch) {
+                    Swal.fire({
+                        title: 'ราคาตรงกันหรือไม่',
+                        html: `สินค้าที่มีการเปลี่ยนแปลงราคา:<br>${priceDetails}<br>คุณต้องการดำเนินการต่อด้วยราคาปัจจุบันหรือไม่?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'ใช่',
+                        cancelButtonText: 'ไม่ใช่'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            placeOrder(); // ดำเนินการสั่งซื้อ
+                        }
+                    });
+                } else {
+                    placeOrder(); // ไม่มีการเปลี่ยนแปลงราคา ดำเนินการสั่งซื้อ
+                }
+            }
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
+
+function placeOrder() {
+    // ลอจิกการยืนยันคำสั่งซื้อเดิม
+    let fullName = document.getElementById('full-name').value;
+    let address = document.getElementById('shipping-address').value;
+    let city = document.getElementById('city').value;
+    let postalCode = document.getElementById('postal-code').value;
+    let country = document.getElementById('country').value;
+    let phoneNumber = document.getElementById('phone-number').value;
+    let paymentMethod = document.getElementById('payment-method').value;
+
+    if (fullName === '' || address === '' || city === '' || postalCode === '' || country === '' || phoneNumber === '') {
+        alert('กรุณากรอกข้อมูลการจัดส่งทั้งหมด');
+        return;
+    }
+
+    Swal.fire({
+        title: 'ยืนยันคำสั่งซื้อของคุณ',
+        text: `จัดส่งไปที่: ${fullName}\nที่อยู่: ${address}, ${city}, ${postalCode}, ${country}\nโทรศัพท์: ${phoneNumber}\nวิธีการชำระเงิน: ${paymentMethod}`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยัน',
+        cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('ยืนยันคำสั่งซื้อแล้ว!', 'คำสั่งซื้อของคุณถูกวางเรียบร้อยแล้ว', 'success');
+            localStorage.removeItem('cart');
+            window.location.href = 'index.html';
+        }
+    });
+}
     </script>
     
 

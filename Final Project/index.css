@@ -197,3 +197,57 @@ nav {
     cursor: pointer;
 }
 
+/* index.css */
+
+/* สำหรับหน้าจอขนาดเล็ก (มือถือ) */
+@media (max-width: 600px) {
+    .nav-container {
+        flex-direction: column; /* ทำให้แนวนอนกลายเป็นแนวตั้ง */
+        align-items: center;
+    }
+
+    .sidebar {
+        display: block; /* แสดง sidebar บนอุปกรณ์มือถือ */
+        width: 100%;
+    }
+
+    .product {
+        display: flex;
+        flex-direction: column; /* เปลี่ยนแปลงเป็นแนวตั้ง */
+        align-items: center; /* จัดกลาง */
+    }
+
+    .product-items {
+        width: 90%; /* ให้มีความกว้าง 90% ของหน้าจอ */
+        margin-bottom: 10px; /* เพิ่มระยะห่าง */
+    }
+
+    .modal-page {
+        width: 90%; /* ปรับขนาด modal */
+        max-width: 400px; /* จำกัดขนาดสูงสุด */
+        margin: 0 auto; /* จัดกลาง */
+    }
+
+    .modal-desc img {
+        width: 100%; /* ทำให้ภาพใน modal ขนาดเต็ม */
+        height: auto; /* ปรับอัตราส่วนให้ถูกต้อง */
+    }
+
+    .btn {
+        width: 100%; /* ให้ปุ่มเต็มความกว้าง */
+        margin: 5px 0; /* เพิ่มระยะห่าง */
+    }
+}
+
+/* สำหรับหน้าจอขนาดใหญ่ */
+@media (min-width: 601px) {
+    .product {
+        display: flex;
+        flex-wrap: wrap; /* ปรับให้รายการสินค้าเรียงต่อกัน */
+    }
+
+    .product-items {
+        width: calc(33.33% - 20px); /* ให้มีความกว้าง 1/3 ของ container พร้อมระยะห่าง */
+        margin: 10px; /* เพิ่มระยะห่างระหว่างสินค้า */
+    }
+}
