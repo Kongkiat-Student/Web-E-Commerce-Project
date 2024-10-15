@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - FE_Shop</title>
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="checkout.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html">
+                <img src="./imgs/bird.png" class="logonav">
+            </a>
+
+            <div class="nav-profile">
+                <p class="nav-profile-name">SHOP</p>
+                <div onclick="openCart()" style="cursor: pointer;" class="nav-profile-cart">
+                    <i class="fas fa-cart-shopping"></i>
+                    <div id="cartcount" class="cartcount" style="display: none;">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Checkout</h2>
+
+        <h3>Order Summary</h3>
+        <div id="order-summary">
+            <!-- รายละเอียดของสินค้าที่เลือกในตะกร้าจะแสดงในที่นี้ -->
+        </div>
+        <br>
+
+        <h3>Shipping Information</h3>
+        <label for="full-name">Full Name:</label>
+        <input id="full-name" type="text" class="input" placeholder="Enter your full name" required>
+
+        <label for="shipping-address">Address:</label>
+        <input id="shipping-address" type="text" class="input" placeholder="Enter shipping address" required>
+
+        <label for="city">City:</label>
+        <input id="city" type="text" class="input" placeholder="Enter city" required>
+
+        <label for="postal-code">Postal Code:</label>
+        <input id="postal-code" type="text" class="input" placeholder="Enter postal code" required>
+
+        <label for="country">Country:</label>
+        <select id="country" class="input" required>
+            <option value="thailand">Thailand</option>
+            <option value="usa">United States</option>
+            <option value="uk">United Kingdom</option>
+            <option value="canada">Canada</option>
+            <option value="australia">Australia</option>
+        </select>
+
+        <label for="phone-number">Phone Number:</label>
+        <input id="phone-number" type="tel" class="input" placeholder="Enter your phone number" required>
+
+        <h3>Payment Method</h3>
+        <select id="payment-method" class="input" required>
+            <option value="credit-card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="bank-transfer">Bank Transfer</option>
+            <option value="cash-on-delivery">Cash on Delivery</option>
+        </select>
+        <br><br>
+
+        <div class="btn-control">
+            <button onclick="goBackToCart()" class="btn">Back to Cart</button>
+            <button onclick="confirmOrder()" class="btn btn-buy">Confirm Order</button>
+        </div>
+    </div>
+
+    <script>
+        // ฟังก์ชันกลับไปที่หน้าตะกร้าสินค้า
+        function goBackToCart() {
+            window.location.href = 'cart.html';  // เปลี่ยนลิงก์ไปยังหน้าตะกร้าสินค้า
+        }
+
+        function confirmOrder() {
+    // ดึงข้อมูลการจัดส่งและวิธีการชำระเงิน
+    let fullName = document.getElementById('full-name').value;
+    let address = document.getElementById('shipping-address').value;
+    let city = document.getElementById('city').value;
+    let postalCode = document.getElementById('postal-code').value;
+    let country = document.getElementById('country').value;
+    let phoneNumber = document.getElementById('phone-number').value;
+    let paymentMethod = document.getElementById('payment-method').value;
+
+    // ตรวจสอบว่าฟิลด์ข้อมูลการจัดส่งมีการกรอกข้อมูลครบถ้วนหรือไม่
+    if (fullName === '' || address === '' || city === '' || postalCode === '' || country === '' || phoneNumber === '') {
+        alert('Please fill out all shipping information.');
+        return;
+    }
+
+    // สร้างการแจ้งเตือนให้ผู้ใช้ยืนยันการชำระเงิน
+    Swal.fire({
+        title: 'Confirm your order',
+        text: `Shipping to: ${fullName}\nAddress: ${address}, ${city}, ${postalCode}, ${country}\nPhone: ${phoneNumber}\nPayment method: ${paymentMethod}`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // สั่งซื้อสำเร็จ
+            Swal.fire('Order Confirmed!', 'Your order has been placed successfully.', 'success');
+            // ทำการรีเซ็ตตะกร้าสินค้าและพาผู้ใช้กลับไปหน้าแรก
+            localStorage.removeItem('cart');
+            window.location.href = 'index.html';
+        }
+    });
+}
+
+
+        // ฟังก์ชันแสดงสรุปรายการสั่งซื้อจากข้อมูลใน localStorage
+        function loadOrderSummary() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let summary = '<ul>';
+            let total = 0;
+
+            cart.forEach(item => {
+                summary += `<li>${item.name} - ${item.quantity} x ${item.price} THB</li>`;
+                total += item.quantity * item.price;
+            });
+
+            summary += `</ul><p>Total: ${total} THB</p>`;
+            document.getElementById('order-summary').innerHTML = summary;
+        }
+
+        // เรียกฟังก์ชันเมื่อโหลดหน้าเสร็จ
+        $(document).ready(function() {
+            loadOrderSummary();
+        });
+    </script>
+
+</body>
+</html>
